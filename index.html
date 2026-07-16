@@ -1,1 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AuraMiner — AuraMinerBot Web App</title>
 
+  <!-- Tailwind CDN (for quick deployment). For production use, compile Tailwind standalone. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="/styles.css" />
+
+  <!-- Telegram Web App meta & compatibility hints (optional) -->
+  <meta name="telegram:webapp" content="1" />
+</head>
+<body class="bg-[#07060b] text-white antialiased min-h-screen">
+  <div id="app" class="max-w-xl mx-auto p-4">
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-4">
+      <div>
+        <h1 class="text-2xl font-extrabold tracking-tight neon-text">AuraMiner</h1>
+        <p class="text-sm text-slate-300/70">Coin: <span class="font-mono">$AURA</span> · Bot: AuraMinerBot</p>
+      </div>
+      <div class="flex items-center space-x-2">
+        <div id="balance" class="px-3 py-2 glass rounded-lg text-right">
+          <div class="text-xs text-slate-300">Balance</div>
+          <div class="text-lg font-bold text-cyan-300" id="balanceAmount">0</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="mb-4">
+      <div class="flex space-x-2">
+        <button class="tab-btn active" data-tab="home">Home</button>
+        <button class="tab-btn" data-tab="boosts">Boosts</button>
+        <button class="tab-btn" data-tab="tasks">Tasks</button>
+        <button class="tab-btn" data-tab="friends">Friends</button>
+      </div>
+    </nav>
+
+    <!-- Main Card / Web App container -->
+    <main class="glass p-4 rounded-xl shadow-xl">
+      <!-- HOME TAB -->
+      <section id="tab-home" class="tab-section">
+        <div class="flex flex-col items-center">
+          <!-- Energy bar & display -->
+          <div class="w-full mb-4">
+            <div class="flex justify-between items-center mb-2">
+              <div class="text-sm text-slate-300">Energy</div>
+              <div class="text-sm font-mono text-slate-200" id="energyText">1000 / 1000</div>
+            </div>
+            <div class="bg-slate-800 rounded-full h-3 relative overflow-hidden">
+              <div id="energyBar" class="h-3 bg-gradient-to-r from-purple-600 via-cyan-300 to-indigo-500 transition-width" style="width:100%"></div>
+            </div>
+          </div>
+
+          <!-- AURA Crystal -->
+          <div class="relative my-6">
+            <button id="crystalBtn" class="crystal-button">
+              <div class="crystal-inner glow-pulse"></div>
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 200 200">
+                <defs>
+                  <radialGradient id="g1" cx="50%" cy="40%">
+                    <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.95"/>
+                    <stop offset="60%" stop-color="#7c3aed" stop-opacity="0.6"/>
+                    <stop offset="100%" stop-color="#0ea5a4" stop-opacity="0.12"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="100" cy="100" r="80" fill="url(#g1)" />
+              </svg>
+              <div class="crystal-center text-center">
+                <div class="text-sm text-slate-200/80">Tap</div>
+                <div class="text-3xl font-extrabold text-white">AURA</div>
+              </div>
+            </button>
+
+            <!-- floating +X container -->
+            <div id="floatingContainer" class="absolute inset-0 pointer-events-none"></div>
+          </div>
+
+          <!-- action row -->
+          <div class="w-full flex justify-between items-center">
+            <div class="text-xs text-slate-300">Coins per tap: <span id="coinsPerTap">1</span></div>
+            <div class="text-xs text-slate-300">Multitap Lv: <span id="multitapLevel">0</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BOOSTS TAB -->
+      <section id="tab-boosts" class="tab-section hidden">
+        <h3 class="text-lg font-bold mb-3">Boosters & Upgrades</h3>
+        <div class="grid grid-cols-1 gap-3">
+          <div class="upgrade-card">
+            <div>
+              <div class="font-semibold">Multitap</div>
+              <div class="text-sm text-slate-300">Increases coins per tap. Cost doubles each level.</div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm text-cyan-300 font-bold" id="cost-multitap">--</div>
+              <button class="buy-btn" data-upgrade="multitap">Buy</button>
+            </div>
+          </div>
+
+          <div class="upgrade-card">
+            <div>
+              <div class="font-semibold">Energy Limit</div>
+              <div class="text-sm text-slate-300">Increase max energy by +500 per level.</div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm text-cyan-300 font-bold" id="cost-energyLimit">--</div>
+              <button class="buy-btn" data-upgrade="energyLimit">Buy</button>
+            </div>
+          </div>
+
+          <div class="upgrade-card">
+            <div>
+              <div class="font-semibold">Recharge Speed</div>
+              <div class="text-sm text-slate-300">Increase energy regen rate (+ per level).</div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm text-cyan-300 font-bold" id="cost-recharge">--</div>
+              <button class="buy-btn" data-upgrade="recharge">Buy</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TASKS TAB -->
+      <section id="tab-tasks" class="tab-section hidden">
+        <h3 class="text-lg font-bold mb-3">Tasks & Quests</h3>
+        <div class="space-y-3">
+          <div class="task-card">
+            <div>
+              <div class="font-semibold">Join our Telegram Channel</div>
+              <div class="text-sm text-slate-300">Reward: 2,500 AURA</div>
+            </div>
+            <div>
+              <button class="task-btn" data-task="join_channel">Verify</button>
+            </div>
+          </div>
+
+          <div class="task-card">
+            <div>
+              <div class="font-semibold">Follow on X</div>
+              <div class="text-sm text-slate-300">Reward: 1,500 AURA</div>
+            </div>
+            <div>
+              <button class="task-btn" data-task="follow_x">Verify</button>
+            </div>
+          </div>
+
+          <div class="task-card">
+            <div>
+              <div class="font-semibold">Retweet Promo</div>
+              <div class="text-sm text-slate-300">Reward: 1,000 AURA</div>
+            </div>
+            <div>
+              <button class="task-btn" data-task="retweet">Verify</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FRIENDS / REFERRAL TAB -->
+      <section id="tab-friends" class="tab-section hidden">
+        <h3 class="text-lg font-bold mb-2">Invite & Earn</h3>
+        <p class="text-sm text-slate-300 mb-3">Share your referral link. Both you and your friend receive 5,000 AURA when they open the app using your link.</p>
+
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+          <input id="referralLink" class="w-full glass px-3 py-2 rounded-lg text-sm break-all" readonly />
+          <button id="copyReferral" class="btn-primary">Copy</button>
+          <button id="shareReferral" class="btn-ghost">Share</button>
+        </div>
+
+        <div class="mt-4 text-sm text-slate-300">
+          <div>Referral status: <span id="refStatus">None</span></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer / debug -->
+    <footer class="mt-4 text-xs text-slate-400 text-center">
+      AuraMiner · Cyberpunk Mystic Theme · Mobile-optimized
+    </footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
