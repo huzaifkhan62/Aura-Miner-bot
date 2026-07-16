@@ -2,7 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 
 // 1. Apne Telegram Bot ka Token yahan daalo (BotFather se jo mila tha)
-const token = 'YAHAN_APNA_BOT_TOKEN_DAALO';
+const token = '8937519104:AAHfeDTERGAdXwOiCgJJJSmn7ubRWuN1ado';
 
 // 2. Apni Vercel Website ka URL yahan daalo
 const webAppUrl = 'https://aura-mining-bot.vercel.app'; 
