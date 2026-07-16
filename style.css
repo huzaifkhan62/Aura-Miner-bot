@@ -1,1 +1,156 @@
+/* styles.css
+   Custom styling complementing Tailwind to create Cyberpunk-Mystic theme,
+   glassmorphism, neon glow, floating click animation helpers.
+*/
 
+/* Basic glass surface */
+.glass {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  backdrop-filter: blur(8px) saturate(120%);
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* Neon text */
+.neon-text {
+  color: #c4b5fd;
+  text-shadow:
+    0 0 6px rgba(167,139,250,0.8),
+    0 0 16px rgba(14,165,164,0.12),
+    0 4px 24px rgba(12,9,26,0.6);
+}
+
+/* Crystal button */
+.crystal-button {
+  width: 230px;
+  height: 230px;
+  border-radius: 999px;
+  position: relative;
+  overflow: visible;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateZ(0);
+  transition: transform 0.12s ease;
+  box-shadow:
+    0 8px 30px rgba(124,58,237,0.18),
+    0 18px 60px rgba(14,165,164,0.06);
+}
+
+/* inner glass lens */
+.crystal-inner {
+  width: 86%;
+  height: 86%;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(6px) saturate(120%);
+  position: absolute;
+  z-index: 10;
+}
+
+/* center text inside crystal */
+.crystal-center {
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* hover / press interaction */
+.crystal-button:active { transform: scale(0.98) translateY(2px); }
+.crystal-button:focus { outline: none; box-shadow: 0 0 0 4px rgba(124,58,237,0.12); }
+
+/* glowing pulse */
+.glow-pulse {
+  animation: pulse 2.4s infinite ease-in-out;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 6px rgba(167,139,250,0.6), 0 0 40px rgba(126,34,206,0.12); transform: scale(1); }
+  50% { box-shadow: 0 0 14px rgba(167,139,250,0.9), 0 0 80px rgba(12,165,164,0.14); transform: scale(1.02); }
+  100% { box-shadow: 0 0 6px rgba(167,139,250,0.6), 0 0 40px rgba(126,34,206,0.12); transform: scale(1); }
+}
+
+/* upgrade card */
+.upgrade-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* task card */
+.task-card {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  border-radius:10px;
+  background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+  border:1px solid rgba(255,255,255,0.03);
+}
+
+/* buttons */
+.tab-btn {
+  flex:1;
+  padding:10px 12px;
+  border-radius:10px;
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.03);
+  color: #cbd5e1;
+  font-weight:600;
+}
+.tab-btn.active {
+  background: linear-gradient(90deg,#5b21b6,#06b6d4);
+  color: white;
+  box-shadow: 0 6px 20px rgba(59,130,246,0.08);
+}
+
+/* buy / primary */
+.buy-btn, .btn-primary, .task-btn, .btn-ghost {
+  padding:8px 12px;
+  border-radius:8px;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+}
+.buy-btn {
+  background: linear-gradient(90deg,#7c3aed,#06b6d4);
+  color:#fff;
+}
+.btn-primary {
+  background: linear-gradient(90deg,#06b6d4,#7c3aed);
+  color: #fff;
+}
+.btn-ghost {
+  background: transparent;
+  color: #c4b5fd;
+  border: 1px solid rgba(196,181,253,0.12);
+}
+
+/* floating +text animation */
+.floating-plus {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #bde3ff;
+  font-weight:700;
+  text-shadow: 0 2px 12px rgba(14,165,164,0.3);
+  animation: floatUp 1s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes floatUp {
+  0% { opacity:1; transform: translate(-50%, 10px) scale(1); }
+  60% { opacity:1; transform: translate(-50%, -30px) scale(1.02); }
+  100% { opacity:0; transform: translate(-50%, -80px) scale(1.04); }
+}
+
+/* responsive adjustments */
+@media (max-width:420px) {
+  .crystal-button { width: 180px; height: 180px; }
+}
+
+/* utility adjustments for bar transition */
+#energyBar { transition: width 350ms ease; }
