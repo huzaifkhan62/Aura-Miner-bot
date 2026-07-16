@@ -5,7 +5,7 @@ const express = require('express');
 const token = '8937519104:AAHfeDTERGAdXwOiCgJJJSmn7ubRWuN1ado';
 
 // 2. Apni Vercel Website ka URL yahan daalo
-const webAppUrl = 'aura-miner-4l86x41jg-huzaifkhan62s-projects.vercel.app'; 
+const webAppUrl = 'https://aura-miner-bot.vercel.app/'; 
 
 // Bot initialize karein
 const bot = new TelegramBot(token, { polling: true });
